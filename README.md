@@ -15,3 +15,8 @@ Italicized text is the *cat's meow*.
 
 
 At the command prompt, type `nano`.
+
+blow is a R code block
+    library(Seaurt)
+    install.packages()
+code ends

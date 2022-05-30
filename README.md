@@ -98,9 +98,61 @@ saveRDS(pymt_wt_integrated, file.path(r_object_path, "agg_pymt_wt_integrated.rds
 
 ## QC and selecting cells for further analysis
 
-Before doing more analysis, we want to ...
+Before doing more analysis, we want to make sure the cells included are not doublets or low quality cells. There are a number of softwares for doublet identification, e.g. Scrublet, DoubletFinder, scDblFinder, etc. Please refer to this protocol by [Xi and Li] (https://www.sciencedirect.com/science/article/pii/S2405471220304592) for benchmarking these methods. They also include detailed code to run the softwares. 
 
+In this tutorial, we will use commands that available in Seurat for QC.
+* nFeature: the number of unique genes detected in each cell
+* nCount: the total number of molecules detected within each cell
+* percent.mt: The percentage of reads that map to the mitochondrial genome
 
+```
+pymt_wt_integrated[["percent.mt"]] <- PercentageFeatureSet(pymt_wt_integrated, pattern = "^mt-")
+pdf(file.path(plot_path, "violin_qc.pdf"), width = 10, height = 3)
+VlnPlot(pymt_wt_integrated, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3, pt.size = 0.1)
+dev.off()
+pymt_wt_integrated <- subset(pymt_wt_integrated, 
+               subset = nFeature_RNA > 200 & nFeature_RNA < 4000 & percent.mt < 5)
+```
+
+## Exam the inegrated results
+
+We perform dimension reduction and clustering on the integrated dataset.
+
+```
+############################################################
+########### Perform an integrated analysis #################
+############################################################
+
+# specify that we will perform downstream analysis on the corrected data note that the original
+# unmodified data still resides in the 'RNA' assay
+DefaultAssay(pymt_wt_integrated) <- "integrated"
+
+# Run the standard workflow for visualization and clustering
+pymt_wt_integrated <- ScaleData(pymt_wt_integrated, verbose = FALSE)
+pymt_wt_integrated <- RunPCA(pymt_wt_integrated, npcs = 30, verbose = FALSE)
+ElbowPlot(pymt_wt_integrated, ndims = 30) #16, 21, 30
+pymt_wt_integrated <- RunUMAP(pymt_wt_integrated, reduction ="pca", dims= 1:20)
+pymt_wt_integrated <- FindNeighbors(pymt_wt_integrated, reduction = "pca", dims = 1:20)
+pymt_wt_integrated <- FindClusters(pymt_wt_integrated, resolution= 0.2)
+# Visualization
+p1 <- DimPlot(pymt_wt_integrated, reduction = "umap", group.by = "mouse_type")
+p3 <- DimPlot(pymt_wt_integrated, reduction = "umap", label = TRUE, repel = TRUE)
+pdf(file.path(plot_path, "umap_mouse_type_pc20_res02.pdf"), width =5, height = 3)
+p1
+dev.off()
+
+pdf(file.path(plot_path, "umap_cluster_pc20_re02.pdf"), width = 5, height = 3)
+p3
+dev.off()
+```
+
+## Exam Heatmap
+
+We can plot heatmap to exam the overexpressed genes for each cluster. The heatmap can also help use decide on the clustering resolution. Here, we first identify the conserved markers (regardless of mouse type) for each cluster, save them, and generate the heatmap to display top markers for each cluster. 
+
+```
+
+```
 
 Italicized text is the *cat's meow*.
 

@@ -136,13 +136,13 @@ pymt_wt_integrated <- FindNeighbors(pymt_wt_integrated, reduction = "pca", dims 
 pymt_wt_integrated <- FindClusters(pymt_wt_integrated, resolution= 0.2)
 # Visualization
 p1 <- DimPlot(pymt_wt_integrated, reduction = "umap", group.by = "mouse_type")
-p3 <- DimPlot(pymt_wt_integrated, reduction = "umap", label = TRUE, repel = TRUE)
+p2 <- DimPlot(pymt_wt_integrated, reduction = "umap", label = TRUE, repel = TRUE)
 pdf(file.path(plot_path, "umap_mouse_type_pc20_res02.pdf"), width =5, height = 3)
 p1
 dev.off()
 
 pdf(file.path(plot_path, "umap_cluster_pc20_re02.pdf"), width = 5, height = 3)
-p3
+p2
 dev.off()
 ```
 
@@ -151,7 +151,49 @@ dev.off()
 We can plot heatmap to exam the overexpressed genes for each cluster. The heatmap can also help use decide on the clustering resolution. Here, we first identify the conserved markers (regardless of mouse type) for each cluster, save them, and generate the heatmap to display top markers for each cluster. 
 
 ```
+##################################################################
+########### Identify conserved cell type markers #################
+##################################################################
+# For performing differential expression after integration, we switch back to the original data
+DefaultAssay(pymt_wt_integrated) <- "RNA"
 
+# find conserved marker
+# they are differentially expressed compared to other clusters, 
+# but have similar expression between the two groups (PyMT vs WT) you're actually comparing
+for (i in c("N0", "N1", "N2")){
+  name <- paste(as.character(i), "markers", sep = "_")
+  print(name)
+  ident.1 <- as.character(i)
+  val <- FindConservedMarkers(pymt_wt_integrated_major, ident.1 = ident.1, 
+                              grouping.var = "mouse_type", verbose = FALSE)
+  file_name=paste("conserved_cluster", name, sep = "")
+  write.csv(val, file.path(intermediate_data_path, file_name))
+}
+
+remove("conserve_marker_df")
+for (i in unique(Idents(pymt_wt_integrated_major))){
+  file_name <- paste("conserved_cluster", as.character(i), "_markers", sep = "")
+  print(file_name)
+  val <- read.csv(file.path(intermediate_data_path, file_name)) %>%
+    mutate(cluster=i) %>% rename("gene"="X")
+  if (exists("conserve_marker_df")){
+    # if (as.character(i) == "14"){
+    #   new_col <- setdiff(colnames(conserve_marker_df), colnames(val))
+    #   val[new_col] <- NA
+    #   val <- val %>% select(colnames(conserve_marker_df))
+    #   conserve_marker_df <- rbind(conserve_marker_df, val)
+    # }
+    conserve_marker_df <- rbind(conserve_marker_df, val)
+  } else{
+    conserve_marker_df <- val
+  }
+  
+}
+
+conserve_marker_df<- conserve_marker_df %>% 
+  rowwise() %>% 
+  mutate(mean_logFC = mean(c(pymt_avg_logFC, wt_avg_logFC), na.rm = FALSE))%>%
+  as.data.frame()
 ```
 
 Italicized text is the *cat's meow*.

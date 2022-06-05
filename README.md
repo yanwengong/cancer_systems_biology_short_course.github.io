@@ -146,9 +146,9 @@ pdf(file.path(plot_path, "umap_cluster_pc20_re02.pdf"), width = 5, height = 3)
 p2
 dev.off()
 ```
-![umap_mouse_type_cluster_pc20_re02](/docs/assets/umap_mouse_type_cluster_pc20_re02.png)
-![umap_cluster_pc20_re02](/docs/assets/umap_cluster_pc20_re02.png)
-<img src="/docs/assets/umap_mouse_type_cluster_pc20_re02.png" alt="umap_mouse_type_cluster_pc20_re02" width="200"/>
+
+<img src="/docs/assets/umap_mouse_type_cluster_pc20_re02.png" alt="umap_mouse_type_cluster_pc20_re02" width="500"/>
+<img src="/docs/assets/umap_cluster_pc20_re02.png" alt="umap_cluster_pc20_re02" width="500"/>
 ## Exam Heatmap
 
 We can plot heatmap to exam the overexpressed genes for each cluster. The heatmap can also help use decide on the clustering resolution. Here, we first identify the conserved markers (regardless of mouse type) for each cluster, save them, and generate the heatmap to display top markers for each cluster. 
@@ -206,7 +206,8 @@ FeaturePlot(pymt_wt_integrated, features = selected_markers, ncol = 5)
 dev.off()
 
 ```
-![umap_marker_genes](/docs/assets/umap_marker_genes.png)
+
+<img src="/docs/assets/umap_marker_genes.png" alt="umap_marker_genes" width="500"/>
 ## Give cluster identities
 
 By examing the heatmap and marker gene expressions, we can assign cell label to each cluster. Then, we save the integrated object for future use.
@@ -233,6 +234,7 @@ saveRDS(pymt_wt_integrated, file.path(r_object_path,
                                       "agg_pymt_wt_integrated.rds"))
 ```
 
+<img src="/docs/assets/umap_new_cluster.png" alt="umap_new_cluster" width="500"/>
 ## Subset and save neutrophils
 
 ```
@@ -241,7 +243,7 @@ neut <- subset(x = pymt_wt_integrated, idents = "neut")
 saveRDS(neut, file.path(r_object_path, 
                                       "agg_pymt_wt_neut.rds"))
 ```
-![umap_new_cluster](/docs/assets/umap_new_cluster.png)
+
 ## Re-cluster on neutrophil
 
 We subset and "zoom in" the neutrophil group. We want to identify the G-MDSC group, that expresses the known marker genes and enriched in the PyMT sample. 
@@ -267,8 +269,9 @@ pdf(file.path(plot_path, "umap_cluster_pc20_re02.pdf"), width = 5, height = 3)
 p2
 dev.off()
 ```
-![umap_mouse_type_pc20_res02](/docs/assets/umap_mouse_type_pc20_res02.png)
-![umap_cluster_pc20_re02](/docs/assets/umap_cluster_pc20_re02.png)
+
+<img src="/docs/assets/umap_mouse_type_pc20_res02.png" alt="umap_mouse_type_pc20_res02" width="500"/>
+<img src="/docs/assets/umap_cluster_pc20_re02.png" alt="umap_cluster_pc20_re02" width="500"/>
 ## Exam the known marker genes and compute gene signiture score
 
 Similar as the analysis on the integrated object, we can plot the known G-MDSC markers on the UMAP. In addition, we can also compute the gene signiture score, which allows as to exam a larger list of genes by taking control genes into consideration. Here is the document for the function: https://satijalab.org/seurat/reference/addmodulescore
@@ -301,8 +304,10 @@ VlnPlot(neut, features = "top10_g_mdsc_sig1",
   geom_hline(yintercept=0, linetype="dashed", color = "red")
 dev.off()
 ```
-![umap_marker_genes](/docs/assets/umap_marker_genes.png)
-![violinboxplot_gmdsc_score_top10](/docs/assets/violinboxplot_gmdsc_score_top10.png)
+
+<img src="/docs/assets/umap_marker_genes.png" alt="umap_marker_genes" width="500"/>
+<img src="/docs/assets/violinboxplot_gmdsc_score_top10.png" alt="violinboxplot_gmdsc_score_top10" width="500"/>
+        
 From the UMAP and gene signiture scores, we can say that cluster 1 and 5 are likely to be G_MDSC cluster. 
 
 ## Mouse type fraction in each cluster
@@ -329,7 +334,8 @@ dev.off()
 saveRDS(neut, file.path(r_object_path, 
                         "agg_pymt_wt_neut.rds"))
 ```
-![Neut_cellpercent_dist_cluster_vsvs_mouse](/docs/assets/Neut_cellpercent_dist_cluster_vsvs_mouse.png)
+
+<img src="/docs/assets/Neut_cellpercent_dist_cluster_vsvs_mouse.png" alt="Neut_cellpercent_dist_cluster_vsvs_mouse" width="500"/>
 ## Practice
 
 

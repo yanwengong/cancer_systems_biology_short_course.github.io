@@ -222,7 +222,9 @@ By examing the heatmap and marker gene expressions, we can assign cell label to 
 | 1,9,10   | Csf1r, Ccr2      | monoycte   |
 | 4,7      | Cd19, Cd22, Cd79a| B cell     |
 | 8        | Cd3e, Cd4, Cd8a. | T cell     |
-\\
+
+
+
 
 ```
 new.cluster.ids <- c("neut", "mono", "neut", "neut", "B", "neut",

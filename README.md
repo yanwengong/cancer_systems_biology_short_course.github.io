@@ -146,9 +146,9 @@ pdf(file.path(plot_path, "umap_cluster_pc20_re02.pdf"), width = 5, height = 3)
 p2
 dev.off()
 ```
-<img src="/docs/assets/umap_mouse_type_cluster_pc20_re02.png" width="300">
-<img src="/docs/assets/umap_mouse_type_cluster_pc20_re02.png" alt="umap_mouse_type_cluster_pc20_re02" width="500"/>
-<img src="/docs/assets/umap_cluster_pc20_re02.png" alt="umap_cluster_pc20_re02" width="500"/>
+<img src="/cancer_systems_biology_short_course.github.io/docs/assets/umap_mouse_type_cluster_pc20_re02.png" width="300">
+<img src="/cancer_systems_biology_short_course.github.io/docs/assets/umap_mouse_type_cluster_pc20_re02.png" alt="umap_mouse_type_cluster_pc20_re02" width="500"/>
+<img src="/cancer_systems_biology_short_course.github.io/docs/assets/umap_cluster_pc20_re02.png" alt="umap_cluster_pc20_re02" width="500"/>
 ## Exam Heatmap
 
 We can plot heatmap to exam the overexpressed genes for each cluster. The heatmap can also help use decide on the clustering resolution. Here, we first identify the conserved markers (regardless of mouse type) for each cluster, save them, and generate the heatmap to display top markers for each cluster. 

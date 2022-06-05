@@ -34,23 +34,28 @@ install.packages("Seurat")
 library(tidyverse)
 library(Seurat)
 ````
-## Prepare the source data
-For this tutorial, we will analyze a dataset from "Alshetaiwi et al (2020). Defining the emergence of myeloid-derived suppressor cells in breast cancer using single-cell transcriptomics. Science immunology". It contains several immune cells profiled from tumor-bearing mice and healthy mice. We will learn how to identify different cell type in the dataset first. Then subset the data to focus on neutrophils and compare the neutrophils between two condition. 
-
-Please first down the two expression matrix from the GEO links, and save the data at your desired location:\\
-https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM4131336 \\
-https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM4131337
 
 ## Prepare the directory for the project
-It's a good habit to keep project related data in an organized folder. First, create the path in terminal, then assign the path for R as below.  
+It's a good habit to keep project related data in an organized folder. First, create the path in terminal (by mkdir) or manually, then assign the path for R as below.  
+
 Note: "main_path" is designed to store the short course related data.
 ```
-main_path <- "/scratch/yanweng/short_course/"
-input_matrix_path <- file.path(main_path, "geo_download")
+# Note: you need to create one dir on your laptop for this course, and set it as main path here
+main_path <- "/scratch/yanweng/short_course/" 
+# Note: geo_download, r_obj, plot and intermediate_data are the subfolders under the previous main path
+input_matrix_path <- file.path(main_path, "geo_download") # where you will store your downloaded GEO data
 r_object_path <- file.path(main_path, "r_obj")
 plot_path <- file.path(main_path, "plot")
 intermediate_data_path <- file.path(main_path, "intermediate_data")
 ````
+
+## Prepare the source data
+For this tutorial, we will analyze a dataset from "Alshetaiwi et al (2020). Defining the emergence of myeloid-derived suppressor cells in breast cancer using single-cell transcriptomics. Science immunology". It contains several immune cells profiled from tumor-bearing mice and healthy mice. We will learn how to identify different cell type in the dataset first. Then subset the data to focus on neutrophils and compare the neutrophils between two condition. 
+
+Please first down the two expression matrix from the GEO links, and save the data at your input_matrix_path:\\
+https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM4131336 \\
+https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM4131337
+
 
 ## Build the Seurat object
 We will first read the two downloaded expression metrics into R, then create two Seurat object.
@@ -217,8 +222,7 @@ By examing the heatmap and marker gene expressions, we can assign cell label to 
 | 1,9,10   | Csf1r, Ccr2      | monoycte   |
 | 4,7      | Cd19, Cd22, Cd79a| B cell     |
 | 8        | Cd3e, Cd4, Cd8a. | T cell     |
-
-\newline
+\\
 
 ```
 new.cluster.ids <- c("neut", "mono", "neut", "neut", "B", "neut",

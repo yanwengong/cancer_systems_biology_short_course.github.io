@@ -279,24 +279,65 @@ dev.off()
 
 Similar as the analysis on the integrated object, we can plot the known G-MDSC markers on the UMAP. In addition, we can also compute the gene signiture score, which allows as to exam a larger list of genes by taking control genes into consideration. Here is the document for the function: https://satijalab.org/seurat/reference/addmodulescore
 
+We are going to use the previous identified G-MDSC gene list. <paper heatmap here>
 
-
-Italicized text is the *cat's meow*.
-
-
-* This is the first list item.
-* Here's the second list item.
-
-    I need to add another paragraph below the second list item.
-
-* And here's the third list item.
-
-
-At the command prompt, type `nano`.
-
-blow is a R code block
 ```
-library(Seaurt)
-install.packages()
-````
-code ends
+DefaultAssay(neut) <- "RNA"
+selected_markers <- c("Cd84", "Ctsd", "Il1b", "Anxa1", "Arhgdib", "Prdx5")
+pdf(file.path(plot_path, "umap_marker_genes.pdf"), width =12, height = 6)
+FeaturePlot(neut, features = selected_markers, ncol = 3)
+dev.off()
+
+top10 <- c("Cd84", "Ctsd", "Arg2", "Pla2g7", "Il1b", "Clec4e", 
+           "Il1f9", "Junb", "Wfdc17", "Clec4d", "BC100530") %>%
+  list()
+
+neut <- AddModuleScore(
+  object = neut,
+  features = top10,
+  ctrl = 100,
+  name = "top10_g_mdsc_sig"
+)
+
+pdf(paste(plot_path, "violinboxplot_gmdsc_score_top10.pdf", sep = "/"), 
+    width = 5, height = 3)
+VlnPlot(neut, features = "top10_g_mdsc_sig1", 
+        pt.size=0, y.max=2, split.by = "orig.ident")+
+  geom_boxplot(width=0.3, outlier.shape = NA) + 
+  geom_hline(yintercept=0, linetype="dashed", color = "red")
+dev.off()
+```
+
+From the UMAP and gene signiture scores, we can say that cluster 1 and 5 are likely to be G_MDSC cluster. 
+
+## Mouse type fraction in each cluster
+        
+We want to check the mouse type fraction for each cluster, to confirm that cluter 1 and 5 are mainly PyMT cells.
+        
+```
+## check fraction
+data <- neut@meta.data %>%
+  group_by(seurat_clusters, orig.ident) %>%
+  count() %>%
+  group_by(seurat_clusters) %>%
+  mutate(percentage = n/sum(n))
+#data$organ <- factor(data$organ, levels = c("BM", "spleen", "blood", "lung", "tumorMFP"))
+pdf(file.path(plot_path, "Neut_cellpercent_dist_cluster_vsvs_mouse.pdf"), width = 6, height = 4)
+data %>% ggplot(aes(x=orig.ident, y=percentage, fill=seurat_clusters)) +
+  geom_bar(colour="black", stat="identity") + 
+  facet_grid(.~ seurat_clusters) 
+theme_bw() +
+  ggtitle("Cell number percentage by cluster and mouse")
+dev.off()
+  
+# last we save the neutrophil object for future analysis
+saveRDS(neut, file.path(r_object_path, 
+                        "agg_pymt_wt_neut.rds"))
+```
+
+## Practice
+
+
+* Identify the differentially expressed genes in G-MDSC compared with WT neutrophils.
+* Subset the monocyte groups and identify the M-MDSC group.
+  

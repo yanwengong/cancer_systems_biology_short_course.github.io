@@ -1,3 +1,5 @@
 theme: jekyll-theme-cayman
+
+# Your name to show in the footer
 title: Cancer Sysmtems Biology Short Course on scRNA-seq analysis with CellRanger and Seurat
-description: Bookmark this to keep an eye on my project updates!
+author: Yanwen Gong

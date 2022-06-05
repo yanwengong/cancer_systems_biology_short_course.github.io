@@ -206,7 +206,7 @@ dev.off()
 
 ```
 
-<img src="/cancer_systems_biology_short_course.github.io/docs/assets/umap_marker_genes.png" alt="umap_marker_genes" width="400"/>
+<img src="/cancer_systems_biology_short_course.github.io/docs/assets/umap_marker_genes.png" alt="umap_marker_genes">
 ## Give cluster identities
 
 By examing the heatmap and marker gene expressions, we can assign cell label to each cluster. Then, we save the integrated object for future use.
@@ -218,6 +218,7 @@ By examing the heatmap and marker gene expressions, we can assign cell label to 
 | 4,7      | Cd19, Cd22, Cd79a| B cell     |
 | 8        | Cd3e, Cd4, Cd8a. | T cell     |
 
+\newline
 
 ```
 new.cluster.ids <- c("neut", "mono", "neut", "neut", "B", "neut",
@@ -233,7 +234,7 @@ saveRDS(pymt_wt_integrated, file.path(r_object_path,
                                       "agg_pymt_wt_integrated.rds"))
 ```
 
-<img src="/docs/assets/umap_new_cluster.png" alt="umap_new_cluster" width="500"/>
+<img src="/cancer_systems_biology_short_course.github.io/docs/assets/umap_new_cluster.png" alt="umap_new_cluster" width="400"/>
 ## Subset and save neutrophils
 
 ```
@@ -304,7 +305,7 @@ VlnPlot(neut, features = "top10_g_mdsc_sig1",
 dev.off()
 ```
 
-<img src="/cancer_systems_biology_short_course.github.io/docs/assets/umap_marker_genes.png" alt="umap_marker_genes" width="500"/>
+<img src="/cancer_systems_biology_short_course.github.io/docs/assets/umap_marker_genes.png" alt="umap_marker_genes">
 <img src="/cancer_systems_biology_short_course.github.io/docs/assets/violinboxplot_gmdsc_score_top10.png" alt="violinboxplot_gmdsc_score_top10" width="400"/>
         
 From the UMAP and gene signiture scores, we can say that cluster 1 and 5 are likely to be G_MDSC cluster. 

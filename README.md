@@ -146,7 +146,7 @@ pdf(file.path(plot_path, "umap_cluster_pc20_re02.pdf"), width = 5, height = 3)
 p2
 dev.off()
 ```
-
+<img src="/docs/assets/umap_mouse_type_cluster_pc20_re02.png" width="300">
 <img src="/docs/assets/umap_mouse_type_cluster_pc20_re02.png" alt="umap_mouse_type_cluster_pc20_re02" width="500"/>
 <img src="/docs/assets/umap_cluster_pc20_re02.png" alt="umap_cluster_pc20_re02" width="500"/>
 ## Exam Heatmap

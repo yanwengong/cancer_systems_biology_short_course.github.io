@@ -216,7 +216,7 @@ dev.off()
 
 ## Give cluster identities
 
-By examing the heatmap and marker gene expressions, we can assign cell label to each cluster.
+By examing the heatmap and marker gene expressions, we can assign cell label to each cluster. Then, we save the integrated object for future use.
 
 | Cluster ID        | Markers           | Cell Type  |
 | ------------- |:-------------:| -----:|
@@ -224,6 +224,63 @@ By examing the heatmap and marker gene expressions, we can assign cell label to 
 | 1,9,10   | Csf1r, Ccr2      | monoycte   |
 | 4,7      | Cd19, Cd22, Cd79a| B cell     |
 | 8        | Cd3e, Cd4, Cd8a. | T cell     |
+
+
+```
+new.cluster.ids <- c("neut", "mono", "neut", "neut", "B", "neut",
+                     "neut", "B", "T", "mono", "mono")
+names(new.cluster.ids) <- levels(pymt_wt_integrated)
+pymt_wt_integrated <- RenameIdents(pymt_wt_integrated, new.cluster.ids)
+pdf(file.path(plot_path, "umap_new_cluster.pdf"), width = 5, height = 3)
+DimPlot(pymt_wt_integrated, reduction = "umap", label = TRUE, pt.size = 0.5) + NoLegend()
+dev.off()
+
+# save the integrated object
+saveRDS(pymt_wt_integrated, file.path(r_object_path, 
+                                      "agg_pymt_wt_integrated.rds"))
+```
+
+## Subset and save neutrophils
+
+```
+neut <- subset(x = pymt_wt_integrated, idents = "neut")
+
+saveRDS(neut, file.path(r_object_path, 
+                                      "agg_pymt_wt_neut.rds"))
+```
+
+## Re-cluster on neutrophil
+
+We subset and "zoom in" the neutrophil group. We want to identify the G-MDSC group, that expresses the known marker genes and enriched in the PyMT sample. 
+
+```
+DefaultAssay(neut) <- "integrated"
+
+# Run the standard workflow for visualization and clustering
+neut <- ScaleData(neut, verboseneutFALSE)
+neut <- RunPCA(neut, npcs = 30, verbose = FALSE)
+ElbowPlot(neut, ndims = 30) #16, 21, 30
+neut <- RunUMAP(neut, reduction ="pca", dims= 1:20)
+neut <- FindNeighbors(neut, reduction = "pca", dims = 1:20)
+neut <- FindClusters(neut, resolution= 0.2)
+# Visualization
+p1 <- DimPlot(neut, reduction = "umap", group.by = "orig.ident")
+p2 <- DimPlot(neut, reduction = "umap", label = TRUE, repel = TRUE)
+pdf(file.path(plot_path, "umap_mouse_type_pc20_res02.pdf"), width =5, height = 3)
+p1
+dev.off()
+
+pdf(file.path(plot_path, "umap_cluster_pc20_re02.pdf"), width = 5, height = 3)
+p2
+dev.off()
+```
+
+## Exam the known marker genes and compute gene signiture score
+
+Similar as the analysis on the integrated object, we can plot the known G-MDSC markers on the UMAP. In addition, we can also compute the gene signiture score, which allows as to exam a larger list of genes by taking control genes into consideration. Here is the document for the function: https://satijalab.org/seurat/reference/addmodulescore
+
+
+
 Italicized text is the *cat's meow*.
 
 

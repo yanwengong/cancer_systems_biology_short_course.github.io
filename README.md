@@ -196,6 +196,34 @@ conserve_marker_df<- conserve_marker_df %>%
   as.data.frame()
 ```
 
+## Marker genes experssion on UMAP
+
+We can show the known marker genes expression on UMAP.
+
+```
+pymt_wt_integrated <- ScaleData(pymt_wt_integrated, verbose = FALSE)
+selected_markers <- c("Cd19", "Cd22", "Cd79a", "Cd3", "Cd4", "Cd8",
+                      "Csf1r", "Ccr2", "Ly6g", "Cxcr2")
+pdf(file.path(plot_path, "umap_marker_genes.pdf"), width =15, height = 6)
+FeaturePlot(pymt_wt_integrated, features = selected_markers, ncol = 5)
+dev.off()
+
+Idents(pymt_wt_integrated) <-"seurat_clusters"
+pdf(file.path(plot_path, "violin_qc_by_cluster.pdf"), width = 10, height = 3)
+VlnPlot(pymt_wt_integrated, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3, pt.size = 0.1)
+dev.off()
+```
+
+## Give cluster identities
+
+By examing the heatmap and marker gene expressions, we can assign cell label to each cluster.
+
+| Cluster ID        | Markers           | Cell Type  |
+| ------------- |:-------------:| -----:|
+| 0,2,3,5,6| Ly6g, Cxcr2      | neutrophil |
+| 1,9,10   | Csf1r, Ccr2      | monoycte   |
+| 4,7      | Cd19, Cd22, Cd79a| B cell     |
+| 8        | Cd3e, Cd4, Cd8a. | T cell     |
 Italicized text is the *cat's meow*.
 
 

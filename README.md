@@ -1,4 +1,4 @@
-## Cell Ranger
+# Cell Ranger
 ## Cell Ranger Count
 ## Cell Ranger Aggregation 
 
@@ -146,9 +146,8 @@ pdf(file.path(plot_path, "umap_cluster_pc20_re02.pdf"), width = 5, height = 3)
 p2
 dev.off()
 ```
-<img src="/cancer_systems_biology_short_course.github.io/docs/assets/umap_mouse_type_cluster_pc20_re02.png" width="300">
-<img src="/cancer_systems_biology_short_course.github.io/docs/assets/umap_mouse_type_cluster_pc20_re02.png" alt="umap_mouse_type_cluster_pc20_re02" width="500"/>
-<img src="/cancer_systems_biology_short_course.github.io/docs/assets/umap_cluster_pc20_re02.png" alt="umap_cluster_pc20_re02" width="500"/>
+<img src="/cancer_systems_biology_short_course.github.io/docs/assets/umap_mouse_type_cluster_pc20_re02.png" alt="umap_mouse_type_cluster_pc20_re02" width="400"/>
+<img src="/cancer_systems_biology_short_course.github.io/docs/assets/umap_cluster_pc20_re02.png" alt="umap_cluster_pc20_re02" width="400"/>
 ## Exam Heatmap
 
 We can plot heatmap to exam the overexpressed genes for each cluster. The heatmap can also help use decide on the clustering resolution. Here, we first identify the conserved markers (regardless of mouse type) for each cluster, save them, and generate the heatmap to display top markers for each cluster. 
@@ -207,7 +206,7 @@ dev.off()
 
 ```
 
-<img src="/docs/assets/umap_marker_genes.png" alt="umap_marker_genes" width="500"/>
+<img src="/cancer_systems_biology_short_course.github.io/docs/assets/umap_marker_genes.png" alt="umap_marker_genes" width="400"/>
 ## Give cluster identities
 
 By examing the heatmap and marker gene expressions, we can assign cell label to each cluster. Then, we save the integrated object for future use.
@@ -270,8 +269,8 @@ p2
 dev.off()
 ```
 
-<img src="/docs/assets/umap_mouse_type_pc20_res02.png" alt="umap_mouse_type_pc20_res02" width="500"/>
-<img src="/docs/assets/umap_cluster_pc20_re02.png" alt="umap_cluster_pc20_re02" width="500"/>
+<img src="/cancer_systems_biology_short_course.github.io/docs/assets/umap_mouse_type_pc20_res02.png" alt="umap_mouse_type_pc20_res02" width="400"/>
+<img src="/cancer_systems_biology_short_course.github.io/docs/assets/umap_cluster_pc20_re02.png" alt="umap_cluster_pc20_re02" width="400"/>
 ## Exam the known marker genes and compute gene signiture score
 
 Similar as the analysis on the integrated object, we can plot the known G-MDSC markers on the UMAP. In addition, we can also compute the gene signiture score, which allows as to exam a larger list of genes by taking control genes into consideration. Here is the document for the function: https://satijalab.org/seurat/reference/addmodulescore
@@ -305,8 +304,8 @@ VlnPlot(neut, features = "top10_g_mdsc_sig1",
 dev.off()
 ```
 
-<img src="/docs/assets/umap_marker_genes.png" alt="umap_marker_genes" width="500"/>
-<img src="/docs/assets/violinboxplot_gmdsc_score_top10.png" alt="violinboxplot_gmdsc_score_top10" width="500"/>
+<img src="/cancer_systems_biology_short_course.github.io/docs/assets/umap_marker_genes.png" alt="umap_marker_genes" width="500"/>
+<img src="/cancer_systems_biology_short_course.github.io/docs/assets/violinboxplot_gmdsc_score_top10.png" alt="violinboxplot_gmdsc_score_top10" width="400"/>
         
 From the UMAP and gene signiture scores, we can say that cluster 1 and 5 are likely to be G_MDSC cluster. 
 
@@ -335,7 +334,7 @@ saveRDS(neut, file.path(r_object_path,
                         "agg_pymt_wt_neut.rds"))
 ```
 
-<img src="/docs/assets/Neut_cellpercent_dist_cluster_vsvs_mouse.png" alt="Neut_cellpercent_dist_cluster_vsvs_mouse" width="500"/>
+<img src="/cancer_systems_biology_short_course.github.io/docs/assets/Neut_cellpercent_dist_cluster_vsvs_mouse.png" alt="Neut_cellpercent_dist_cluster_vsvs_mouse" width="400"/>
 ## Practice
 
 

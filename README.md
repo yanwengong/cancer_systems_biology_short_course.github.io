@@ -113,7 +113,7 @@ dev.off()
 pymt_wt_integrated <- subset(pymt_wt_integrated, 
                subset = nFeature_RNA > 200 & nFeature_RNA < 4000 & percent.mt < 5)
 ```
-
+![Book logo](/docs/assets/violin_qc.png)
 ## Exam the inegrated results
 
 We perform dimension reduction and clustering on the integrated dataset.

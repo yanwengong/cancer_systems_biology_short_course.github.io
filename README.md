@@ -180,7 +180,7 @@ DoHeatmap(pymt_wt_integrated,
 dev.off()
 
 ```
-
+![heatmap_markers_integration_cellType_seurat_cluster](/docs/assets/heatmap_markers_integration_cellType_seurat_cluster.png)
 ## Marker genes experssion on UMAP
 
 We can show the known marker genes expression on UMAP.
@@ -236,7 +236,7 @@ dev.off()
 saveRDS(pymt_wt_integrated, file.path(r_object_path, 
                                       "agg_pymt_wt_integrated.rds"))
 ```
-
+![heatmap_markers_integration_cellTyper](/docs/assets/heatmap_markers_integration_cellTyper.png)
 <img src="/cancer_systems_biology_short_course.github.io/docs/assets/umap_new_cluster.png" alt="umap_new_cluster" width="400"/>
 ## Subset and save neutrophils
 

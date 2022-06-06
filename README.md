@@ -155,46 +155,30 @@ dev.off()
 <img src="/cancer_systems_biology_short_course.github.io/docs/assets/umap_cluster_pc20_re02.png" alt="umap_cluster_pc20_re02" width="400"/>
 ## Exam Heatmap
 
-We can plot heatmap to exam the overexpressed genes for each cluster. The heatmap can also help use decide on the clustering resolution. Here, we first identify the conserved markers (regardless of mouse type) for each cluster, save them, and generate the heatmap to display top markers for each cluster. 
+We can plot heatmap to exam the overexpressed genes for each cluster. The heatmap can also help us view the top differentially expressed genes for each clusters so that we can assign cell type label. In addition, if we see two cluster share similar genes we can decide to merge them or change the clustering resolution. 
+
 
 ```
 ##################################################################
-########### Identify conserved cell type markers #################
+########### Identify cell type markers ###########################
 ##################################################################
 # For performing differential expression after integration, we switch back to the original data
 DefaultAssay(pymt_wt_integrated) <- "RNA"
+Idents(pymt_wt_integrated) <- "seurat_clusters"
+markers <- FindAllMarkers(pymt_wt_integrated, only.pos = TRUE, min.pct = 0.25, logfc.threshold = 0.25)
+markers %>%
+  group_by(cluster) %>%
+  slice_max(n = 2, order_by = avg_logFC)
+write.csv(markers, file.path(intermediate_data_path, "nonconserve_markers_integration_seurat_cluster.csv"))
+top5 <- markers %>% group_by(cluster) %>%
+  top_n(n = 5, wt = avg_logFC)
+pdf(file.path(plot_path, "heatmap_markers_integration_cellType_seurat_cluster.pdf"), width = 15, height = 10)
+DoHeatmap(pymt_wt_integrated, 
+          features = as.character(top5$gene), 
+          label = FALSE,
+          raster=FALSE) + NoLegend() 
+dev.off()
 
-# find conserved marker
-# they are differentially expressed compared to other clusters, 
-# but have similar expression between the two groups (PyMT vs WT) you're actually comparing
-for (i in c(Idents(pymt_wt_integrated))){
-  name <- paste(as.character(i), "markers", sep = "_")
-  print(name)
-  ident.1 <- as.character(i)
-  val <- FindConservedMarkers(pymt_wt_integrated, ident.1 = ident.1, 
-                              grouping.var = "mouse_type", verbose = FALSE)
-  file_name=paste("conserved_cluster", name, sep = "")
-  write.csv(val, file.path(intermediate_data_path, file_name))
-}
-
-remove("conserve_marker_df")
-for (i in unique(Idents(pymt_wt_integrated))){
-  file_name <- paste("conserved_cluster", as.character(i), "_markers", sep = "")
-  print(file_name)
-  val <- read.csv(file.path(intermediate_data_path, file_name)) %>%
-    mutate(cluster=i) %>% rename("gene"="X")
-  if (exists("conserve_marker_df")){
-    conserve_marker_df <- rbind(conserve_marker_df, val)
-  } else{
-    conserve_marker_df <- val
-  }
-  
-}
-
-conserve_marker_df<- conserve_marker_df %>% 
-  rowwise() %>% 
-  mutate(mean_logFC = mean(c(pymt_avg_logFC, wt_avg_logFC), na.rm = FALSE))%>%
-  as.data.frame()
 ```
 
 ## Marker genes experssion on UMAP
@@ -212,6 +196,7 @@ dev.off()
 ```
 
 <img src="/cancer_systems_biology_short_course.github.io/docs/assets/umap_marker_genes.png" alt="umap_marker_genes">
+
 ## Give cluster identities
 
 By examing the heatmap and marker gene expressions, we can assign cell label to each cluster. Then, we save the integrated object for future use.
@@ -231,10 +216,22 @@ new.cluster.ids <- c("neut", "mono", "neut", "neut", "B", "neut",
                      "neut", "B", "T", "mono", "mono")
 names(new.cluster.ids) <- levels(pymt_wt_integrated)
 pymt_wt_integrated <- RenameIdents(pymt_wt_integrated, new.cluster.ids)
+# plot the UMAP
 pdf(file.path(plot_path, "umap_new_cluster.pdf"), width = 5, height = 3)
 DimPlot(pymt_wt_integrated, reduction = "umap", label = TRUE, pt.size = 0.5) + NoLegend()
 dev.off()
 
+# plot the heatmap 
+markers <- FindAllMarkers(pymt_wt_integrated, only.pos = TRUE, min.pct = 0.25, logfc.threshold = 0.25)
+write.csv(markers, file.path(intermediate_data_path, "markers_integration_cellType.csv"))
+top10 <- markers %>% group_by(cluster) %>%
+  top_n(n = 10, wt = avg_logFC)
+pdf(file.path(plot_path, "heatmap_markers_integration_cellTyper.pdf"), width = 15, height = 10)
+DoHeatmap(pymt_wt_integrated, 
+          features = as.character(top5$gene), 
+          label = FALSE,
+          raster=FALSE) + NoLegend() 
+dev.off()
 # save the integrated object
 saveRDS(pymt_wt_integrated, file.path(r_object_path, 
                                       "agg_pymt_wt_integrated.rds"))

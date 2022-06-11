@@ -1,6 +1,59 @@
+# Basic Command Lines
+
+We will learn some basic command lines to help us nevigate the system fast.
+
+## Access terminal
+To open the Mac command lines / terminal, we nevigate to the top bar and click "Go". In the drop-down window, click "Utilities". Then find the Terminal and double click to open it. 
+
+To open a windows terminal :
+
+*Click on Start and type cmd. Select Command Prompt from the list.
+
+*Another option is to use Git bash ( can be downloaded here 
+https://urldefense.com/v3/__https://gitforwindows.org/__;!!CzAuKJ42GuquVTTmVmPViYEvSg!Ja5jmSMmrc3R9baahKfqp8IkvfsrBq_oQtzN0ygfkw1keGS2ACMovvZAZT2gmZYTD4OSwt-rr8zDr2c$ )
+
+## Basic command line commands
+* pdw: get the current working directory/folder
+* cd: get into one directory
+* mkdir: make a new directory
+* cp: make a copy
+* vim: start to write a file
+* sh: run shell script
+* cat: dislay a file content 
+* ...
+
 # Cell Ranger
-## Cell Ranger Count
-## Cell Ranger Aggregation 
+Cell Ranger is a set of analysis pipelines developed/maintained by 10x Genomics. Its functions include aligning reads, generating feature-barcode matrices, clustering and other analysis. Please see details at their [website](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/what-is-cell-ranger). 
+
+We will give examples their two funcions here. You can write save the shell script as "file_name.sh" and run it in the terminal with "sh file_name.sh". 
+
+## CellRanger Count
+This function take the fastq files as input and performs alignment, barcode count and UMI counting.
+
+```
+FASTQ_PATH=/share/crsp/lab/kkessenb/yanweng/mdsc/fastq/wt/HA_14WKS_WT_Blood_GEX_1_08262020/HA_14WKS_WT_Blood_GEX_1_08262020
+RESULT_PATH="/share/crsp/lab/kkessenb/yanweng/mdsc/cellranger/wt"
+cd $RESULT_PATH
+cellranger count --id=blood \
+                 --fastqs=$FASTQ_PATH \
+                 --sample=HA_14WKS_WT_Blood_GEX_1_08262020 \
+                 --transcriptome=/pub/yanweng/common_data/mm10/refdata-gex-mm10-2020-A
+```
+## CellRanger Aggregation 
+Thie function aggregates outputs from multiple runs of cellranger count , normalizing those runs to the same sequencing depth and then recomputing the feature-barcode matrices and analysis on the combined data.
+
+To aggregate samples, you need the sample id and the path to the molecule_info.h5 file produced by cellranger count. We will create a csv like below to store the inforation.
+
+```
+library_id,molecule_h5
+spleen_pymt,/share/crsp/lab/kkessenb/yanweng/mdsc/cellranger/spleen2_re20210414/outs/molecule_info.h5
+spleen_wt,/share/crsp/lab/kkessenb/yanweng/mdsc/cellranger/wt/lung/outs/molecule_info.h5
+```
+Then you run the following commands in the terminal.
+```
+cd /share/crsp/lab/kkessenb/yanweng/mdsc/cellranger
+cellranger aggr --id=pymt_wt_agg_20210725 --csv=/pub/yanweng/kai/mdcs/script/pymt_wt_aggr_20210725.csv
+```
 
 # Seurat
 Seurat is a R package for analyzing single-cell multi-omics data. 
@@ -372,5 +425,10 @@ saveRDS(neut, file.path(r_object_path,
 
 
 * Identify the differentially expressed genes in G-MDSC compared with WT neutrophils.
+  - Assign cluster1.pymt and cluster3.pymt as gMDSC, the other pymt clusters as neutrophils
+  - Assign all cluster in pymt as neutrophils
+  - Identify markers by FindAllMarkers
+  - Plot heatmap
 * Subset the monocyte groups and identify the M-MDSC group.
+  - Similar analysis as above but on the monocyte groups
   

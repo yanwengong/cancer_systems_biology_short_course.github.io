@@ -38,7 +38,21 @@ library(Seurat)
 ## Prepare the directory for the project
 It's a good habit to keep project related data in an organized folder. First, create the path in terminal (by mkdir) or manually, then assign the path for R as below.  
 
-Note: "main_path" is designed to store the short course related data.
+To create the path in the terminal, open the terminal and type the following commands.
+
+```
+pwd 
+# save this path somewhere # for me it's "/Users/yanwengong" (Mac user)
+# for windows, it could be "C:/Users/yanwengong/Documents"
+mkdir short_course
+cd short_course
+mkdir geo_download
+mkdir r_obj
+mkdir plot
+mkdir intermediate_data
+```
+
+Then go back to Rstudio, and assign the created path as variables. 
 ```
 # Note: you need to create one dir on your laptop for this course, and set it as main path here
 main_path <- "/scratch/yanweng/short_course/" 
@@ -71,7 +85,11 @@ pymt_count <- read.table(file.path(input_matrix_path,
 pymt <- CreateSeuratObject(counts = pymt_count)
 ```
 
-*Question*: How to check the count matrix stored in the Seurat object?
+*Question*: How to check the count matrix stored in the Seurat object? What about the meta data?
+```
+GetAssayData(wt, slot="counts")
+wt@meta.data
+```
 
 ## Combine the two Seurat objects
 
@@ -111,6 +129,7 @@ In this tutorial, we will use commands that available in Seurat for QC.
 * percent.mt: The percentage of reads that map to the mitochondrial genome
 
 ```
+DefaultAssay(pymt_wt_integrated) <- "RNA"
 pymt_wt_integrated[["percent.mt"]] <- PercentageFeatureSet(pymt_wt_integrated, pattern = "^mt-")
 pdf(file.path(plot_path, "violin_qc.pdf"), width = 10, height = 3)
 VlnPlot(pymt_wt_integrated, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3, pt.size = 0.1)
@@ -135,13 +154,23 @@ DefaultAssay(pymt_wt_integrated) <- "integrated"
 
 # Run the standard workflow for visualization and clustering
 pymt_wt_integrated <- ScaleData(pymt_wt_integrated, verbose = FALSE)
+# Note: if you do not have enought memory, type "memory.limit(size=500000)", then re-try
 pymt_wt_integrated <- RunPCA(pymt_wt_integrated, npcs = 30, verbose = FALSE)
-ElbowPlot(pymt_wt_integrated, ndims = 30) #16, 21, 30
+ElbowPlot(pymt_wt_integrated, ndims = 30) 
+# Check Point: you can evaluate what is the best PC number to choose here, 
+# and use it in the "dims" variable below![image](https://user-images.githubusercontent.com/11083640/173200532-2a631215-7327-4ba3-99b9-c49463a72c4d.png)
+![image](https://user-images.githubusercontent.com/11083640/173200538-340dde12-217a-446e-951b-dc124052db8b.png)
+![image](https://user-images.githubusercontent.com/11083640/173200540-ded19d7f-d0c0-4f13-a2b7-34c8185f0a32.png)
+
+# dims= 1:20 means use the top 20 PCs
 pymt_wt_integrated <- RunUMAP(pymt_wt_integrated, reduction ="pca", dims= 1:20)
 pymt_wt_integrated <- FindNeighbors(pymt_wt_integrated, reduction = "pca", dims = 1:20)
 pymt_wt_integrated <- FindClusters(pymt_wt_integrated, resolution= 0.2)
+# Check Point: you can adjust resolution by changing the values in "dims". 
+# For instance, if you want to decrease resolution, you can use "dims = 0.15"
+
 # Visualization
-p1 <- DimPlot(pymt_wt_integrated, reduction = "umap", group.by = "mouse_type")
+p1 <- DimPlot(pymt_wt_integrated, reduction = "umap", group.by = "orig.ident")
 p2 <- DimPlot(pymt_wt_integrated, reduction = "umap", label = TRUE, repel = TRUE)
 pdf(file.path(plot_path, "umap_mouse_type_pc20_res02.pdf"), width =5, height = 3)
 p1
@@ -171,7 +200,7 @@ markers %>%
   slice_max(n = 2, order_by = avg_logFC)
 write.csv(markers, file.path(intermediate_data_path, "nonconserve_markers_integration_seurat_cluster.csv"))
 top5 <- markers %>% group_by(cluster) %>%
-  top_n(n = 5, wt = avg_logFC)
+  top_n(n = 5, wt = avg_log2FC)
 pdf(file.path(plot_path, "heatmap_markers_integration_cellType_seurat_cluster.pdf"), width = 15, height = 10)
 DoHeatmap(pymt_wt_integrated, 
           features = as.character(top5$gene), 
@@ -225,7 +254,7 @@ dev.off()
 markers <- FindAllMarkers(pymt_wt_integrated, only.pos = TRUE, min.pct = 0.25, logfc.threshold = 0.25)
 write.csv(markers, file.path(intermediate_data_path, "markers_integration_cellType.csv"))
 top10 <- markers %>% group_by(cluster) %>%
-  top_n(n = 10, wt = avg_logFC)
+  top_n(n = 10, wt = avg_log2FC)
 pdf(file.path(plot_path, "heatmap_markers_integration_cellTyper.pdf"), width = 15, height = 10)
 DoHeatmap(pymt_wt_integrated, 
           features = as.character(top5$gene), 

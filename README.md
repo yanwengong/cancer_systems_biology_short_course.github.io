@@ -337,7 +337,7 @@ VlnPlot(neut, features = "top10_g_mdsc_sig1",
 dev.off()
 ```
 
-<img src="/cancer_systems_biology_short_course.github.io/docs/assets/umap_marker_genes.png" alt="umap_marker_genes">
+<img src="/cancer_systems_biology_short_course.github.io/docs/assets/umap_marker_genes_neut.png" alt="umap_marker_genes_neut">
 <img src="/cancer_systems_biology_short_course.github.io/docs/assets/violinboxplot_gmdsc_score_top10.png" alt="violinboxplot_gmdsc_score_top10" width="400"/>
         
 From the UMAP and gene signiture scores, we can say that cluster 1 and 5 are likely to be G_MDSC cluster. 

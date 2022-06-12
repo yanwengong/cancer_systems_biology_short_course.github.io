@@ -7,9 +7,9 @@ To open the Mac command lines / terminal, we nevigate to the top bar and click "
 
 To open a windows terminal :
 
-*Click on Start and type cmd. Select Command Prompt from the list.
+* Click on Start and type cmd. Select Command Prompt from the list.
 
-*Another option is to use Git bash ( can be downloaded here 
+* Another option is to use Git bash ( can be downloaded here 
 https://urldefense.com/v3/__https://gitforwindows.org/__;!!CzAuKJ42GuquVTTmVmPViYEvSg!Ja5jmSMmrc3R9baahKfqp8IkvfsrBq_oQtzN0ygfkw1keGS2ACMovvZAZT2gmZYTD4OSwt-rr8zDr2c$ )
 
 ## Basic command line commands

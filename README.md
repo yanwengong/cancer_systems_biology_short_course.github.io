@@ -41,7 +41,7 @@ cellranger count --id=blood \
                  --transcriptome=/pub/yanweng/common_data/mm10/refdata-gex-mm10-2020-A
 ```
 ## CellRanger Aggregation 
-Thie function aggregates outputs from multiple runs of cellranger count , normalizing those runs to the same sequencing depth and then recomputing the feature-barcode matrices and analysis on the combined data.
+This function aggregates outputs from multiple runs of cellranger count, normalizing those runs to the same sequencing depth and then recomputing the feature-barcode matrices and analysis on the combined data.
 
 To aggregate samples, you need the sample id and the path to the molecule_info.h5 file produced by cellranger count. We will create a csv like below to store the information.
 

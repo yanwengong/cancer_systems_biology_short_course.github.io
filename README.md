@@ -26,10 +26,10 @@ https://urldefense.com/v3/__https://gitforwindows.org/__;!!CzAuKJ42GuquVTTmVmPVi
 # Cell Ranger
 Cell Ranger is a set of analysis pipelines developed/maintained by 10x Genomics. Its functions include aligning reads, generating feature-barcode matrices, clustering and other analysis. Please see details at their [website](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/what-is-cell-ranger). 
 
-We will give examples their two funcions here. You can write save the shell script as "file_name.sh" and run it in the terminal with "sh file_name.sh". 
+We will give examples of their two functions here. You can write save the shell script as "file_name.sh" and run it in the terminal with "sh file_name.sh". 
 
 ## CellRanger Count
-This function take the fastq files as input and performs alignment, barcode count and UMI counting.
+This function takes the fastq files as input and performs alignment, barcode count and UMI counting.
 
 ```
 FASTQ_PATH=/share/crsp/lab/kkessenb/yanweng/mdsc/fastq/wt/HA_14WKS_WT_Blood_GEX_1_08262020/HA_14WKS_WT_Blood_GEX_1_08262020
@@ -43,7 +43,7 @@ cellranger count --id=blood \
 ## CellRanger Aggregation 
 Thie function aggregates outputs from multiple runs of cellranger count , normalizing those runs to the same sequencing depth and then recomputing the feature-barcode matrices and analysis on the combined data.
 
-To aggregate samples, you need the sample id and the path to the molecule_info.h5 file produced by cellranger count. We will create a csv like below to store the inforation.
+To aggregate samples, you need the sample id and the path to the molecule_info.h5 file produced by cellranger count. We will create a csv like below to store the information.
 
 ```
 library_id,molecule_h5
@@ -79,7 +79,7 @@ Please note you only need to install package one time, and need to load package 
 Please refer to **Seurat** webpage below for the detailed installation instruction.
 https://satijalab.org/seurat/articles/install.html
 
-We also recommend install **tidyverse**, which is a collection of R packages designed for data science. https://www.tidyverse.org
+We also recommend installing **tidyverse**, which is a collection of R packages designed for data science. https://www.tidyverse.org
 
 So here, we want to type the following code in Rstudio console to install and load the two of our pakcages.
 ```
@@ -124,6 +124,13 @@ Please first down the two expression matrix from the GEO links, and save the dat
 https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM4131336 \\
 https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM4131337
 
+Then decompress the downloaded files by gunzip
+```
+gunzip GSM4131336_Wild_Type_Expression_Matrix.txt.gz
+gunzip GSM4131337_PYMT_Expression_Matrix.txt.gz
+```
+
+Move the decompressed files into the previously defined input_matrix_path.
 
 ## Build the Seurat object
 We will first read the two downloaded expression metrics into R, then create two Seurat object.
@@ -193,7 +200,7 @@ pymt_wt_integrated <- subset(pymt_wt_integrated,
 ```
 ![QC](/docs/assets/violin_qc.png)
 
-## Exam the inegrated results
+## Examine the inegrated results
 
 We perform dimension reduction and clustering on the integrated dataset.
 
@@ -236,7 +243,7 @@ dev.off()
 ```
 <img src="/cancer_systems_biology_short_course.github.io/docs/assets/umap_mouse_type_cluster_pc20_re02.png" alt="umap_mouse_type_cluster_pc20_re02" width="400"/>
 <img src="/cancer_systems_biology_short_course.github.io/docs/assets/umap_cluster_pc20_re02.png" alt="umap_cluster_pc20_re02" width="400"/>
-## Exam Heatmap
+## Generate a Heatmap
 
 We can plot heatmap to exam the overexpressed genes for each cluster. The heatmap can also help us view the top differentially expressed genes for each clusters so that we can assign cell type label. In addition, if we see two cluster share similar genes we can decide to merge them or change the clustering resolution. 
 
@@ -248,10 +255,11 @@ We can plot heatmap to exam the overexpressed genes for each cluster. The heatma
 # For performing differential expression after integration, we switch back to the original data
 DefaultAssay(pymt_wt_integrated) <- "RNA"
 Idents(pymt_wt_integrated) <- "seurat_clusters"
+pymt_wt_integrated <- ScaleData(pymt_wt_integrated, verbose = FALSE)
 markers <- FindAllMarkers(pymt_wt_integrated, only.pos = TRUE, min.pct = 0.25, logfc.threshold = 0.25)
 markers %>%
   group_by(cluster) %>%
-  slice_max(n = 2, order_by = avg_logFC)
+  slice_max(n = 2, order_by = avg_log2FC)
 write.csv(markers, file.path(intermediate_data_path, "nonconserve_markers_integration_seurat_cluster.csv"))
 top5 <- markers %>% group_by(cluster) %>%
   top_n(n = 5, wt = avg_log2FC)
@@ -264,13 +272,12 @@ dev.off()
 
 ```
 ![heatmap_markers_integration_cellType_seurat_cluster](/docs/assets/heatmap_markers_integration_cellType_seurat_cluster.png)
-## Marker genes experssion on UMAP
+## Marker genes expression on UMAP
 
 We can show the known marker genes expression on UMAP.
 
 ```
-pymt_wt_integrated <- ScaleData(pymt_wt_integrated, verbose = FALSE)
-selected_markers <- c("Cd19", "Cd22", "Cd79a", "Cd3", "Cd4", "Cd8",
+selected_markers <- c("Cd19", "Cd22", "Cd79a", "Cd3e", "Cd4", "Cd8a",
                       "Csf1r", "Ccr2", "Ly6g", "Cxcr2")
 pdf(file.path(plot_path, "umap_marker_genes.pdf"), width =15, height = 6)
 FeaturePlot(pymt_wt_integrated, features = selected_markers, ncol = 5)
@@ -338,7 +345,7 @@ We subset and "zoom in" the neutrophil group. We want to identify the G-MDSC gro
 DefaultAssay(neut) <- "integrated"
 
 # Run the standard workflow for visualization and clustering
-neut <- ScaleData(neut, verboseneutFALSE)
+neut <- ScaleData(neut, verbos = FALSE)
 neut <- RunPCA(neut, npcs = 30, verbose = FALSE)
 ElbowPlot(neut, ndims = 30) #16, 21, 30
 neut <- RunUMAP(neut, reduction ="pca", dims= 1:20)

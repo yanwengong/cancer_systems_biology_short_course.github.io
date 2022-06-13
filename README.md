@@ -13,7 +13,7 @@ To open a windows terminal :
 https://urldefense.com/v3/__https://gitforwindows.org/__;!!CzAuKJ42GuquVTTmVmPViYEvSg!Ja5jmSMmrc3R9baahKfqp8IkvfsrBq_oQtzN0ygfkw1keGS2ACMovvZAZT2gmZYTD4OSwt-rr8zDr2c$ )
 
 ## Basic command line commands
-* pdw: get the current working directory/folder
+* pwd: get the current working directory/folder
 * cd: get into one directory
 * mkdir: make a new directory
 * cp: make a copy

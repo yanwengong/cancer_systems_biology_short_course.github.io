@@ -26,7 +26,7 @@ https://urldefense.com/v3/__https://gitforwindows.org/__;!!CzAuKJ42GuquVTTmVmPVi
 ## Practice
 
 * Print and save the current working directory
-* Create the following directories \
+* Create the following directories 
  >.. short_course\
  >>   ... geo_download\
  >>   ... r_obj\

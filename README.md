@@ -31,7 +31,7 @@ https://urldefense.com/v3/__https://gitforwindows.org/__;!!CzAuKJ42GuquVTTmVmPVi
  |   ... geo_download\
  |   ... r_obj\
  |   ... plot\
- |   ... intermediate_data\
+ |   ... intermediate_data
 
 # Cell Ranger
 Cell Ranger is a set of analysis pipelines developed/maintained by 10x Genomics. Its functions include aligning reads, generating feature-barcode matrices, clustering and other analysis. Please see details at their [website](https://support.10xgenomics.com/single-cell-gene-expression/software/pipelines/latest/what-is-cell-ranger). 

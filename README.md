@@ -14,6 +14,7 @@ https://urldefense.com/v3/__https://gitforwindows.org/__;!!CzAuKJ42GuquVTTmVmPVi
 
 ## Basic command line commands
 * pwd: get the current working directory/folder
+* ls: list the files/subfolders under the current folder
 * cd: get into one directory
 * mkdir: make a new directory
 * cp: make a copy

@@ -373,6 +373,7 @@ We are going to use the previous identified G-MDSC gene list. <paper heatmap her
 
 ```
 DefaultAssay(neut) <- "RNA"
+neut <- ScaleData(neut, verbos = FALSE)
 selected_markers <- c("Cd84", "Ctsd", "Il1b", "Anxa1", "Arhgdib", "Prdx5")
 pdf(file.path(plot_path, "umap_marker_genes.pdf"), width =12, height = 6)
 FeaturePlot(neut, features = selected_markers, ncol = 3)

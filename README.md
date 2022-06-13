@@ -363,11 +363,11 @@ p2
 dev.off()
 ```
 
-<img src="/cancer_systems_biology_short_course.github.io/docs/assets/umap_mouse_type_pc20_res02.png" alt="umap_mouse_type_pc20_res02" width="400"/>
+<img src="/cancer_systems_biology_short_course.github.io/docs/assets/neut_umap_mouse_type_pc20_res02.png" alt="neut_umap_mouse_type_pc20_res02" width="400"/>
 <img src="/cancer_systems_biology_short_course.github.io/docs/assets/umap_cluster_pc20_re02.png" alt="umap_cluster_pc20_re02" width="400"/>
-## Exam the known marker genes and compute gene signiture score
+## Examine the known marker genes and compute gene signature score
 
-Similar as the analysis on the integrated object, we can plot the known G-MDSC markers on the UMAP. In addition, we can also compute the gene signiture score, which allows as to exam a larger list of genes by taking control genes into consideration. Here is the document for the function: https://satijalab.org/seurat/reference/addmodulescore
+Similar as the analysis on the integrated object, we can plot the known G-MDSC markers on the UMAP. In addition, we can also compute the gene signature score, which allows as to exam a larger list of genes by taking control genes into consideration. Here is the document for the function: https://satijalab.org/seurat/reference/addmodulescore
 
 We are going to use the previous identified G-MDSC gene list. <paper heatmap here>
 
@@ -433,7 +433,7 @@ saveRDS(neut, file.path(r_object_path,
 
 
 * Identify the differentially expressed genes in G-MDSC compared with WT neutrophils.
-  - Assign cluster1.pymt and cluster3.pymt as gMDSC, the other pymt clusters as neutrophils
+  - Assign cluster1.pymt and cluster5.pymt as gMDSC, the other pymt clusters as neutrophils
   - Assign all cluster in pymt as neutrophils
   - Identify markers by FindAllMarkers
   - Plot heatmap

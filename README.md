@@ -374,7 +374,7 @@ dev.off()
 ```
 
 <img src="/cancer_systems_biology_short_course.github.io/docs/assets/neut_umap_mouse_type_pc20_res02.png" alt="neut_umap_mouse_type_pc20_res02" width="400"/>
-<img src="/cancer_systems_biology_short_course.github.io/docs/assets/umap_cluster_pc20_re02.png" alt="umap_cluster_pc20_re02" width="400"/>
+<img src="/cancer_systems_biology_short_course.github.io/docs/assets/neut_umap_cluster_pc20_re02.png" alt="neut_umap_cluster_pc20_re02" width="400"/>
 ## Examine the known marker genes and compute gene signature score
 
 Similar as the analysis on the integrated object, we can plot the known G-MDSC markers on the UMAP. In addition, we can also compute the gene signature score, which allows as to exam a larger list of genes by taking control genes into consideration. Here is the document for the function: https://satijalab.org/seurat/reference/addmodulescore
